@@ -12,8 +12,8 @@ const (
 	frenchHelloPrefix  = "Bonjour, "
 )
 
-func greetingPrefix(language string) string {
-	prefix := englishHelloPrefix
+// This way of returning string from function where we dony explictly create the to-be returned variable or not even mention it while returning.
+func greetingPrefix(language string) (prefix string) {
 	switch language {
 	case french:
 		prefix = frenchHelloPrefix
@@ -23,7 +23,7 @@ func greetingPrefix(language string) string {
 		prefix = englishHelloPrefix
 	}
 
-	return prefix
+	return
 }
 
 func Hello(name string, language string) string {
