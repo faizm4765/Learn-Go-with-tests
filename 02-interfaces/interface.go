@@ -39,6 +39,7 @@ func main() {
 	// here comes interface. As of now in second approach we are calling same methods but with just different receiver types. We want to call it with same receiver type.
 	checkArea(circle)
 	checkArea(rect)
+	// yahan upar we are passing params of type Rectange and Circle to method checkArea() which accepts params of type Shape, so we can imply type Rect and Circle implement Shape interface.
 
 	// calculate perimeter
 	checkPerimeter(circle)
