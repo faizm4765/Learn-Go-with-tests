@@ -1,12 +1,15 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"io"
+	"os"
+)
 
-func Greet(name string) {
-	fmt.Printf("Hello, %s", name)
+func Greet(w io.Writer, name string) {
+	fmt.Fprintf(w, "Hello, %s\n", name)
 }
 
 func main() {
-	fmt.Printf("Learning dependency injection\n")
-	Greet("Faiz")
+	Greet(os.Stdout, "Faiz")
 }
