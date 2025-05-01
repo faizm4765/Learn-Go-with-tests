@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -38,10 +39,11 @@ func TestUsersListResponse(t *testing.T) {
 		}),
 	)
 
+	fmt.Println("Mock server URL:", mocksServer.URL)
 	client := NewApiClient(mocksServer.URL)
 	users, _ := client.FetchAllUsers()
 	expectedUsersCount := 3
-	if len(users) != 3 {
+	if len(users) != expectedUsersCount {
 		t.Errorf("Got %d Expected %d", len(users), expectedUsersCount)
 	}
 }
