@@ -1,10 +1,39 @@
 package main
 
-// Is file mein humlog stretch krenge mocking method ko to see ki Print and Sleep ka order sahi follow ho ra ya nhin. Ye extended example hai 04-mocking ka.
-// kya ye aaj krengee?????
+import (
+	"fmt"
+	"net/http"
+)
 
-import "fmt"
+type ApiClient struct {
+	baseUrl string
+}
+
+func NewApiClient(baseUrl string) ApiClient {
+	return ApiClient{baseUrl: baseUrl}
+}
+
+func (client ApiClient) FetchUser(id int) (int, error) {
+	url := fmt.Sprintf("%s/users/%d", client.baseUrl, id)
+
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Println("Error fetching user:", err)
+		return 0, err
+	}
+
+	defer resp.Body.Close()
+	return resp.StatusCode, err
+}
 
 func main() {
-	fmt.Println("*&54")
+	fmt.Println("Hello, World!")
+	client := NewApiClient("https://jsonplaceholder.typicode.com/")
+	statusCode, err := client.FetchUser(1)
+	if err != nil {
+		fmt.Println("Error:", err)
+	} else {
+		fmt.Println("Status Code:", statusCode)
+		fmt.Println("User fetched successfully!!")
+	}
 }
