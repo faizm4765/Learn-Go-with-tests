@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 )
 
 type ApiClient struct {
-	baseUrl string
+	baseUrl       string
+	timeoutPeriod time.Duration
 }
 
 type User struct {
@@ -16,8 +18,11 @@ type User struct {
 	Name string `json:"name"`
 }
 
-func NewApiClient(baseUrl string) ApiClient {
-	return ApiClient{baseUrl: baseUrl}
+func NewApiClient(baseUrl string, timeoutPeriod time.Duration) ApiClient {
+	return ApiClient{
+		baseUrl:       baseUrl,
+		timeoutPeriod: timeoutPeriod,
+	}
 }
 
 func (client ApiClient) FetchUser(id int) (int, error) {
@@ -36,7 +41,11 @@ func (client ApiClient) FetchUser(id int) (int, error) {
 func (client ApiClient) FetchAllUsers() ([]User, error) {
 	url := fmt.Sprintf("%s/users", client.baseUrl)
 
-	resp, err := http.Get(url)
+	http_client := &http.Client{
+		Timeout: client.timeoutPeriod,
+	}
+
+	resp, err := http_client.Get(url)
 	if err != nil {
 		fmt.Println("Error fetching users:", err)
 		return []User{}, err
@@ -61,7 +70,7 @@ func (client ApiClient) FetchAllUsers() ([]User, error) {
 
 func main() {
 	fmt.Println("Hello, World!")
-	client := NewApiClient("https://jsonplaceholder.typicode.com/")
+	client := NewApiClient("https://jsonplaceholder.typicode.com/", 10*time.Second)
 	statusCode, err := client.FetchUser(1)
 	if err != nil {
 		fmt.Println("Error:", err)
